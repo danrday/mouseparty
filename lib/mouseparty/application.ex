@@ -6,6 +6,8 @@ defmodule Mouseparty.Application do
   use Application
 
   def start(_type, _args) do
+    # import Supervisor.Spec
+
     children = [
       # Start the Ecto repository
       Mouseparty.Repo,
@@ -14,6 +16,7 @@ defmodule Mouseparty.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Mouseparty.PubSub},
       # Start the Endpoint (http/https)
+      MousepartyWeb.Presence,
       MousepartyWeb.Endpoint
       # Start a worker by calling: Mouseparty.Worker.start_link(arg)
       # {Mouseparty.Worker, arg}

@@ -17,6 +17,13 @@
   <article class="column">
     <h2>Logged in as:</h2>
     <p><%= @current_user.email %></p>
+
+    <h3>Members</h3>
+    <%= for user <- @users do %>
+      <p><%= user.email %></p>
+    <% end %>
+ 
+
     <h2>Resources</h2>
     <ul>
       <li>
