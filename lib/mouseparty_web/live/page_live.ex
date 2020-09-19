@@ -1,9 +1,18 @@
 defmodule MousepartyWeb.PageLive do
   use MousepartyWeb, :live_view
 
+  alias Mouseparty.Accounts
+
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, assign(socket, query: "", results: %{})}
+  def mount(_params, %{"user_token" => token}, socket) do
+    {:ok,
+     assign(
+       socket,
+       query: "",
+       results: %{},
+       current_user: Accounts.get_user_by_session_token(token),
+       coords: %{}
+     )}
   end
 
   @impl true
