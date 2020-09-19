@@ -17,12 +17,6 @@ defmodule MousepartyWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", MousepartyWeb do
-    pipe_through :browser
-
-    live "/", PageLive, :index
-  end
-
   # Other scopes may use custom stacks.
   # scope "/api", MousepartyWeb do
   #   pipe_through :api
@@ -62,6 +56,7 @@ defmodule MousepartyWeb.Router do
   scope "/", MousepartyWeb do
     pipe_through [:browser, :require_authenticated_user]
 
+    live "/", PageLive, :index
     get "/users/settings", UserSettingsController, :edit
     put "/users/settings/update_password", UserSettingsController, :update_password
     put "/users/settings/update_email", UserSettingsController, :update_email
