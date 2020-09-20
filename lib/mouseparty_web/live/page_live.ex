@@ -25,7 +25,7 @@ defmodule MousepartyWeb.PageLive do
      assign(
        socket,
        current_user: current_user,
-       coords: %{},
+       # coords: %{},
        users: []
      )}
   end
@@ -41,7 +41,8 @@ defmodule MousepartyWeb.PageLive do
         socket.id,
         %{
           email: current_user.email,
-          id: current_user.id
+          id: current_user.id,
+          coords: %{"x" => 0, "y" => 0, "k" => 1}
         }
       )
 
@@ -65,20 +66,27 @@ defmodule MousepartyWeb.PageLive do
   end
 
   @impl true
-  def handle_event("mouse_move", value, socket) do
-    MousepartyWeb.Endpoint.broadcast_from(self(), @topic, "user_coordinates", %{
-      coords: value,
-      user_id: socket.assigns.current_user.id
-    })
+  def handle_event("mouse_move", value, %{assigns: %{current_user: current_user}} = socket) do
+    # MousepartyWeb.Endpoint.broadcast_from(self(), @topic, "user_coordinates", %{
+    #   coords: value,
+    #   user_id: socket.assigns.current_user.id
+    # })
+
+    Presence.update(
+      self(),
+      @topic,
+      socket.id,
+      %{coords: value, id: current_user.id, email: current_user.email}
+    )
 
     IO.inspect(socket.assigns)
 
     {:noreply, socket}
   end
 
-  def handle_info(%{event: "user_coordinates", payload: state}, socket) do
-    coords = socket.assigns.coords
-    user_coords = Map.put(coords, state.user_id, state.coords)
-    {:noreply, assign(socket, coords: user_coords)}
-  end
+  # def handle_info(%{event: "user_coordinates", payload: state}, socket) do
+  #   coords = socket.assigns.coords
+  #   user_coords = Map.put(coords, state.user_id, state.coords)
+  #   {:noreply, assign(socket, coords: user_coords)}
+  # end
 end

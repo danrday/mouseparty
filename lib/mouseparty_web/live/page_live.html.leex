@@ -11,26 +11,19 @@
           <g></g>
           <g></g>
           <g>
-          <%= for user <- @users, Map.has_key?(@coords, user.id) do %>
+          <%= for user <- @users do %>
             <text
                 id= <%= user.id %>
-                x= <%= @coords[user.id]["x"] %>
-                y= <%= @coords[user.id]["y"] %>
-                fontSize= <%= @coords[user.id]["k"] %> ? 16 / <%=@coords[user.id]["k"] %> : 16
+                x= <%= user.coords["x"] %>
+                y= <%= user.coords["y"] %>
+                fontSize= <%= user.coords["k"] %> ? 16 / <%=user.coords["k"] %> : 16
               >
-                🖌 <%= user.email %>
+                🖌 <%= user.email %> (x: <%= user.coords["x"] %> y: <%= user.coords["y"] %>)
             </text>
           <% end %>
           </g>
         </g>
   </svg>
 
-  <%= for user <- @users do %>
-  <div><%= @coords[user.id]["x"] %></div>
-  <div><%= @coords[user.id]["y"] %></div>
-  <div><%= user.email %></div>
-  <% end %>
-
-  <div> HELLO</div>
 </div>
 
