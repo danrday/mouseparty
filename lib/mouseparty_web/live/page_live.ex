@@ -15,7 +15,8 @@ defmodule MousepartyWeb.PageLive do
         @topic,
         socket.id,
         %{
-          email: current_user.email
+          email: current_user.email,
+          id: current_user.id
         }
       )
 
@@ -27,7 +28,6 @@ defmodule MousepartyWeb.PageLive do
        user_id: current_user.id,
        current_user: current_user,
        coords: %{},
-       presence_state: Presence.list(socket),
        users: []
      )}
   end
@@ -43,6 +43,29 @@ defmodule MousepartyWeb.PageLive do
     IO.inspect(Presence.list(@topic))
 
     {:noreply, assign(socket, users: users)}
+  end
+
+  @impl true
+  def handle_event("mouse_move", value, socket) do
+    IO.inspect(value)
+    # IO.inspect(socket.assigns.current_user.email)
+
+    MousepartyWeb.Endpoint.broadcast_from(self(), @topic, "user_coordinates", %{
+      coords: value,
+      user_id: socket.assigns.current_user.id
+    })
+
+    {:noreply, socket}
+  end
+
+  def handle_info(%{event: "user_coordinates", payload: state}, socket) do
+    coords = socket.assigns.coords
+
+    user_coords = Map.put(coords, state.user_id, state.coords)
+
+    IO.inspect(user_coords)
+
+    {:noreply, assign(socket, coords: user_coords)}
   end
 
   @impl true
