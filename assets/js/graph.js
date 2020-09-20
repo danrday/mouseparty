@@ -10,7 +10,7 @@ const Canvas= {
 
       const coords = {
           x: xyTransform[0],
-          y: xyTransform[1],
+          y: (xyTransform[1] - 180),
           k: transform.k
         }
       this.pushEvent("mouse_move", coords)

@@ -1,9 +1,9 @@
- <div class="canvas">
+<div class="canvas">
   <svg
         phx-hook="Canvas"
         id="graph_canvas"
         width="100%"
-        height="100%"
+        height="50%"
         style="border: 1px solid black"
       >
         <rect width="100%" height="100%" fill="powderblue" />
@@ -11,21 +11,26 @@
           <g></g>
           <g></g>
           <g>
-        
+          <%= for user <- @users, Map.has_key?(@coords, user.id) do %>
+            <text
+                id= <%= user.id %>
+                x= <%= @coords[user.id]["x"] %>
+                y= <%= @coords[user.id]["y"] %>
+                fontSize= <%= @coords[user.id]["k"] %> ? 16 / <%=@coords[user.id]["k"] %> : 16
+              >
+                🖌 <%= user.email %>
+            </text>
+          <% end %>
           </g>
         </g>
   </svg>
-</div>
 
-<h2>Logged in as:</h2>
-<p><%= @current_user.email %></p>
-
-<h3>Members</h3>
-<%= for user <- @users do %>
-  <p><%= user.email %></p>
-
-  <p>coordinates:</p>
+  <%= for user <- @users do %>
   <div><%= @coords[user.id]["x"] %></div>
   <div><%= @coords[user.id]["y"] %></div>
-  <div><%= @coords[user.id]["k"] %></div>
-<% end %>
+  <div><%= user.email %></div>
+  <% end %>
+
+  <div> HELLO</div>
+</div>
+

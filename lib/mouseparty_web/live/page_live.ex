@@ -38,7 +38,11 @@ defmodule MousepartyWeb.PageLive do
       ) do
     users =
       Presence.list(@topic)
-      |> Enum.map(fn {_user_id, data} -> data[:metas] |> List.first() end)
+      |> Enum.map(fn {_user_id, data} ->
+        data[:metas]
+        |> List.first()
+      end)
+      |> Enum.filter(fn map -> map.email != socket.assigns.current_user.email end)
 
     IO.inspect(Presence.list(@topic))
 
@@ -47,7 +51,7 @@ defmodule MousepartyWeb.PageLive do
 
   @impl true
   def handle_event("mouse_move", value, socket) do
-    IO.inspect(value)
+    # IO.inspect(value)
     # IO.inspect(socket.assigns.current_user.email)
 
     MousepartyWeb.Endpoint.broadcast_from(self(), @topic, "user_coordinates", %{
@@ -62,8 +66,6 @@ defmodule MousepartyWeb.PageLive do
     coords = socket.assigns.coords
 
     user_coords = Map.put(coords, state.user_id, state.coords)
-
-    IO.inspect(user_coords)
 
     {:noreply, assign(socket, coords: user_coords)}
   end
