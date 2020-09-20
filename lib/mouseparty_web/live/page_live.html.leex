@@ -3,7 +3,7 @@
         phx-hook="Canvas"
         id="graph_canvas"
         width="100%"
-        height="50%"
+        height="100%"
         style="border: 1px solid black"
       >
         <rect width="100%" height="100%" fill="powderblue" />
@@ -13,17 +13,16 @@
           <g>
           <%= for user <- @users do %>
             <text
-                id= <%= user.id %>
-                x= <%= user.coords["x"] %>
-                y= <%= user.coords["y"] %>
-                fontSize= <%= user.coords["k"] %> ? 16 / <%=user.coords["k"] %> : 16
-              >
-                🖌 <%= user.email %> (x: <%= user.coords["x"] %> y: <%= user.coords["y"] %>)
+              id= <%= user.id %>
+              x= <%= user.coords["x"] %>
+              y= <%= user.coords["y"] %>
+              fontSize= <%= user.coords["k"] %> ? 16 / <%=user.coords["k"] %> : 16
+            >
+              🖌 <%= user.email %> (x: <%= user.coords["x"] %> y: <%= user.coords["y"] %>)
             </text>
           <% end %>
           </g>
         </g>
   </svg>
-
 </div>
 
